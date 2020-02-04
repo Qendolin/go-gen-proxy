@@ -16,8 +16,18 @@ import (
 
 func main() {
 
-	importPath := "github.com/go-gl/gl/v3.2-core/gl"
-	outPath := "gl-proxy"
+	if len(os.Args) != 3 {
+		fmt.Println("Usage: go-gen-proxy <packageImportPath> <destinationFolder>")
+		return
+	}
+
+	importPath := os.Args[1]
+	outPath := os.Args[2]
+
+	err := os.MkdirAll(outPath, os.ModePerm)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	pkg, err := build.Import(importPath, ".", build.FindOnly)
 	if err != nil {
