@@ -24,6 +24,13 @@ func main() {
 	importPath := os.Args[1]
 	outPath := os.Args[2]
 
+	err := doPackage(importPath, outPath)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func doPackage(importPath, outPath string) error {
 	err := os.MkdirAll(outPath, os.ModePerm)
 	if err != nil {
 		log.Fatal(err)
@@ -84,9 +91,9 @@ func main() {
 	}
 }
 
-/*func doFileNoop(root *ast.File, importPath string) *ast.File {
+func doFileNoop(root *ast.File, importPath string) *ast.File {
 
-}*/
+}
 
 func doFile(root *ast.File, importPath string) *ast.File {
 	orgPkgRef := fmt.Sprintf("__%s", root.Name.Name)
