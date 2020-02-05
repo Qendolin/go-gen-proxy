@@ -104,18 +104,21 @@ func __invokeHandler(funcName string, callId int64) (string, int64) {
 	ProxyInvocationHandler(funcName, callId)
 	return funcName, callId
 }`))
-		proxyWriter, err := os.OpenFile(filepath.Join(outPath, "proxy__.go"), os.O_WRONLY|os.O_CREATE, 0666)
-		if err != nil {
-			return err
-		}
-		data := struct {
-			Package string
-		}{
-			Package: pkg.Name,
-		}
-		err = proxyTempl.Execute(proxyWriter, data)
-		if err != nil {
-			return err
+
+		if !noop {
+			proxyWriter, err := os.OpenFile(filepath.Join(outPath, "proxy__.go"), os.O_WRONLY|os.O_CREATE, 0666)
+			if err != nil {
+				return err
+			}
+			data := struct {
+				Package string
+			}{
+				Package: pkg.Name,
+			}
+			err = proxyTempl.Execute(proxyWriter, data)
+			if err != nil {
+				return err
+			}
 		}
 	}
 	return nil
